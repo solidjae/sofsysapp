@@ -25,7 +25,6 @@ def get_categories(category):
 
     response = requests.request("GET", url, headers=headers)
     response_json = response.json()
-
     product_nos = [product["product_no"] for product in response_json["products"]]
     print(product_nos)
     # getproducts.get_products(product_nos)

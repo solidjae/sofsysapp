@@ -1,10 +1,11 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, stream_with_context
 import getproductsfromcats
 from templates import *
 from refreshToken import refresh
 import puttingtags
 import getsubcats
 import pandas as pd
+import time
 
 app = Flask(__name__)
 
@@ -15,6 +16,9 @@ def index():
 
 @app.route('/execute_function', methods=['POST'])
 def execute_function():
+    global temp_product_nos
+    global temp_cat_no
+
     segments = {
             "Event": 52,
             "New": 198,
@@ -28,19 +32,23 @@ def execute_function():
     }
     option = request.json.get('selectedOption')  # Access JSON data instead of form data
     cat_no = segments[option]
-    getsubcats.get_sub_categories(cat_no)
-    product_nos = getproductsfromcats.get_categories()
-    global temp_product_nos
+
+    product_nos = getproductsfromcats.get_categories(cat_no)
+    
+    temp_cat_no = cat_no
     temp_product_nos = product_nos
-    return jsonify(message='Categories processed successfully')
 
-@app.route('/loading')
-def loading():
-    return render_template("loading_screen.html")
+    return render_template('loading_screen.html', my_data = cat_no)
 
-@app.route('/tags')
-def tags():
-    return render_template("tags.html")
+@app.route('/processing')
+def processing():
+    def generate():
+        time.sleep(5)
+        result_dict = getsubcats.get_sub_categories(temp_cat_no)
+        print(result_dict)
+        yield render_template('tags.html')
+
+    return app.response_class(stream_with_context(generate()), content_type='text/html')
 
 @app.route('/success')
 def success():

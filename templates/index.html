@@ -98,6 +98,7 @@
 </div>
 
 <script>
+    
     function toggleDropdown() {
         var dropdownForm = document.querySelector(".dropdown-form");
         dropdownForm.classList.toggle("active");
@@ -110,24 +111,32 @@
     }
 
     function executeFunction() {
-        var selectedOption = document.querySelector(".dropdown-form button").innerText;
-        fetch('/execute_function', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ selectedOption: selectedOption }),
-        })
-        .then(response => response.text())
-        .then(data => {
-            // Process the response from the server
-            alert(data);
-            window.location.href = '/loading';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
+    var selectedOption = document.querySelector(".dropdown-form button").innerText;
+    fetch('/execute_function', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ selectedOption: selectedOption }),
+    })
+    .then(response => {
+        if (response.ok) {
+            // Return the HTML content from the response
+            return response.text();
+        } else {
+            console.error('Request failed with status:', response.status);
+            // Optionally, handle error scenarios
+            throw new Error('Request failed');
+        }
+    })
+    .then(htmlContent => {
+        // Update the content of the entire body with the received HTML content
+        document.body.innerHTML = htmlContent;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
     // Close the dropdown when clicking outside of it
     document.addEventListener("click", function(event) {
