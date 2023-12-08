@@ -12,7 +12,7 @@ options = ChromeOptions()
 def get_sub_categories(cat_no):
     
     sub_cat_dict = {}
-    options.add_argument("--headless")
+    options.add_argument("--headless=new")
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
     url = "https://sofsystem.cafe24.com/product/list.html?cate_no=" + str(cat_no)
     

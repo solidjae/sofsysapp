@@ -1,22 +1,30 @@
-from flask import Flask, render_template, jsonify, request, stream_with_context
+from typing import Union
+from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 import getproductsfromcats
 from templates import *
 from refreshToken import refresh
 import puttingtags
 import getsubcats
+import getproducts
 import pandas as pd
 import time
+import asyncio
 
-app = Flask(__name__)
 
-@app.route('/')
+app = FastAPI()
+app.secret_key = 'j1'
+
+@app.get('/')
 def index():
     refresh()
     return render_template("index.html")
 
 @app.route('/execute_function', methods=['POST'])
 def execute_function():
-    global temp_product_nos
     global temp_cat_no
 
     segments = {
@@ -33,22 +41,38 @@ def execute_function():
     option = request.json.get('selectedOption')  # Access JSON data instead of form data
     cat_no = segments[option]
 
-    product_nos = getproductsfromcats.get_categories(cat_no)
-    
     temp_cat_no = cat_no
-    temp_product_nos = product_nos
+    return redirect('/processing')
 
-    return render_template('loading_screen.html', my_data = cat_no)
 
-@app.route('/processing')
+@app.route('/processing', methods=['GET'])
 def processing():
-    def generate():
-        time.sleep(5)
-        result_dict = getsubcats.get_sub_categories(temp_cat_no)
-        print(result_dict)
-        yield render_template('tags.html')
+    global temp_product_nos
+    global temp_cat_no
 
-    return app.response_class(stream_with_context(generate()), content_type='text/html')
+    temp_product_nos = getproductsfromcats.get_categories(temp_cat_no)
+    sub_cat_dict = getsubcats.get_sub_categories(temp_cat_no)
+
+    session['sub_cat_dict'] = sub_cat_dict
+    return redirect(url_for('subcats'))
+
+@app.route('/subcats')
+def subcats():
+    sub_cat_dict = session.get('sub_cat_dict', {})
+    return render_template("subcats.html", sub_cat_dict=sub_cat_dict)
+
+@app.route('/processsubcats', methods=['POST'])
+def process_sub_cats():
+    global temp_product_nos
+
+    cat = request.json.get('catNumber')
+    temp_product_nos = getproductsfromcats.get_categories(cat)
+
+    return redirect('/tags')
+
+@app.route('/tags', methods=['GET'])
+def tags():
+    return render_template("tags.html")
 
 @app.route('/success')
 def success():
@@ -56,6 +80,10 @@ def success():
 
 @app.route('/products')
 def products():
+    global temp_product_nos
+
+    getproducts.get_products(temp_product_nos)
+    
     excel_file_path = 'products_data.xlsx'
 
     df = pd.read_excel(excel_file_path, usecols="B,G,M,AG")

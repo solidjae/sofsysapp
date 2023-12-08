@@ -1,56 +1,44 @@
+<!DOCTYPE html>
 <html>
-<header><title>Loading</title></header>
 <head>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='loading.css') }}"/>
+    <title>Loading...</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: sans-serif;
+        }
+        .loading-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 5px solid #ddd;
+            border-top: 5px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    
 </head>
-<script>
-    function resizenow() {
-        var browserwidth = window.innerWidth;
-        var browserheight = window.innerHeight;
-        document.querySelector('.bonfire-pageloader-icon').style.right = ((browserwidth - document.querySelector(".bonfire-pageloader-icon").offsetWidth) / 2) + "px";
-        document.querySelector('.bonfire-pageloader-icon').style.top = ((browserheight - document.querySelector(".bonfire-pageloader-icon").offsetHeight) / 2) + "px";
-    };
-    resizenow();
 
-    window.addEventListener('resize', function() {
-        resizenow();
-    });
+<div class="loading-container">
+    <div class="spinner"></div>
+    <p>Please wait... Processing data...</p>
+</div>
 
-    document.body.addEventListener('touchmove', function(e) {
-        e.preventDefault();
-    });
-
-    var scrollPosition = [
-        window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
-        window.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
-    ];
-    var html = document.querySelector('html');
-    html.dataset.scrollPosition = scrollPosition;
-    html.dataset.previousOverflow = html.style.overflow;
-    html.style.overflow = 'hidden';
-    window.scrollTo(scrollPosition[0], scrollPosition[1]);
-
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(function() {
-            window.location.href = '/processing';
-        }, 1000);  // Delay in milliseconds (adjust as needed)
-    });
-</script>
-<body>
-  <div class="center">
-    <div class="msg">
-        <div id="bonfire-pageloader">
-            <div class="bonfire-pageloader-icon">
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                    width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
-                    <!-- Your SVG path data here -->
-                </svg>
-            </div>
-        </div>
-        <div style="color:white; margin-left:auto; margin-right:auto; font-size: 1.3em;">
-            Please wait... Loading...
-        </div>
-    </div>
-  </div>
 </body>
+
 </html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subcategories Dropdown</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Subcategories Dropdown</h2>
+
+    <div>
+        <label for="subcategoryDropdown">Select a Subcategory:</label>
+        <select id="subcategoryDropdown"></select>
+        <button onclick="handleButtonClick()">Submit</button>
+    </div>
+
+    <script>
+        // Example sub_cat_dict provided by the server
+        var sub_cat_dict = {
+            'Category1': '123',
+            'Category2': '456',
+            'Category3': '789'
+            // Add more categories as needed
+        };
+
+        // Function to populate dropdown options
+        function populateDropdown() {
+            var dropdown = document.getElementById("subcategoryDropdown");
+
+            for (var category in sub_cat_dict) {
+                var option = document.createElement("option");
+                option.value = sub_cat_dict[category];
+                option.text = category;
+                dropdown.add(option);
+            }
+        }
+
+        // Function to handle button click and send PUT request
+        function handleButtonClick() {
+            var selectedValue = document.getElementById("subcategoryDropdown").value;
+
+            // Add your fetch request here using selectedValue
+            // Example fetch('/index', { method: 'PUT', body: JSON.stringify({ catNumber: selectedValue }) })
+
+            // For demonstration purposes, log the selected value to the console
+            console.log('Selected Value:', selectedValue);
+        }
+
+        // Populate dropdown options on page load
+        window.onload = populateDropdown;
+    </script>
+</body>
+</html>

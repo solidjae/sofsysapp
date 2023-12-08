@@ -1,0 +1,17 @@
+// Tree Graph
+digraph {
+	Root
+	"name: 홍길동"
+	Root -> name:" 홍길동"
+	"age: 30"
+	Root -> age:" 30"
+	"city: 서울"
+	Root -> city:" 서울"
+	"details: {'hobby': 'Reading', 'language': '한국어'}"
+	Root -> details:" {'hobby'": 'Reading', 'language': '한국어'}
+	"hobby: Reading"
+	details:" {'hobby'": 'Reading', 'language': '한국어'} -> hobby:" Reading"
+	"language: 한국어"
+	details:" {'hobby'": 'Reading', 'language': '한국어'} -> language:" 한국어"
+	encoding=utf8 fontname="Malgun Gothic"
+}
