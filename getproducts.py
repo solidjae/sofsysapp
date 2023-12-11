@@ -24,11 +24,5 @@ def get_products(product_nos):
 
     df.to_excel("products_data.xlsx", index=False)
 
-
-
-
-
-
-
 if __name__ == "__main__":
     get_products()

@@ -25,9 +25,11 @@ def refresh():
                 json.dump(response, file)
             print(response)
             print("token refreshed")
+            return "Token Refreshed"
         else:
             print("refresh token error, getting new token")
             postfortoken.get_token()
+            return "Error, regenerating token"
 
 
 if __name__ == "__main__":
