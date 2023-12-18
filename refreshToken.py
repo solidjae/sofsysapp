@@ -2,8 +2,6 @@ import requests
 import json
 import postfortoken
 
-
-
 def refresh():
 
     
