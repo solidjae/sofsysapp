@@ -11,5 +11,12 @@ if uploaded_file:
     fig1 = px.bar(two_months_df, x = 'keyword', y = 'ratio_change')
     fig2 = px.bar(last_year_df, x = 'keyword', y = 'ratio_change')
 
+    st.subheader("Comparing ratio between last 2 months")
     st.plotly_chart(fig1, use_container_width=True)
+
+    st.write("Top 10 gainers for last month: ", ", ".join(two_months_df.nlargest(10, 'ratio_change')['keyword']))
+
+    st.subheader("Comparing ratio between between last month and last year")
     st.plotly_chart(fig2, use_container_width=True)
+
+    st.write("Top 10 gainers for last month vs last year: ", ", ".join(last_year_df.nlargest(10, 'ratio_change')['keyword']))

@@ -10,8 +10,8 @@ import plotly.express as px
 from datetime import datetime, timedelta
 ssl._create_default_https_context = ssl._create_unverified_context
 
-client_id = "ay5oiiPc3FQUI6itxMct"
-client_secret = "Rp32vUs6i_"
+client_id = "PvUZc4rvI25p0PSUWj_J"
+client_secret = "ht4yToUsez"
 url  = "https://openapi.naver.com/v1/datalab/shopping/category/keywords"
 
 today = datetime.now()
@@ -34,7 +34,9 @@ def split_list(input_list, chunk_size):
     return [input_list[i:i + chunk_size] for i in range(0, len(input_list), chunk_size)]
 
 def make_df_with_different_date(excel):
+   
     keyword_df = keyword_getter.keyword_get(excel)
+
     last_month_df = setting_up_requests(keyword_df, date_into_string(first_day_last_month), date_into_string(last_day_last_month))
     two_months_ago_df = setting_up_requests(keyword_df, date_into_string(first_day_2_months), date_into_string(last_day_2_months))
     last_year_df = setting_up_requests(keyword_df, date_into_string(first_day_last_year), date_into_string(last_day_last_year))
@@ -49,7 +51,6 @@ def make_df_with_different_date(excel):
 
     result_2_vs_last_df = result_2_vs_last_df[result_2_vs_last_df['keyword'] != keyword_df['campaign'][0]].sort_values(by='ratio_change', ascending=False).reset_index(drop=True)
     result_last_month_vs_year = result_last_month_vs_year[result_last_month_vs_year['keyword'] != keyword_df['campaign'][0]].sort_values(by='ratio_change', ascending=False).reset_index(drop=True)
-
     return result_2_vs_last_df, result_last_month_vs_year
     
 # take in keywords from the keyword_getter and plug in values for the api 
