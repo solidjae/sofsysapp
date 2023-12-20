@@ -1,1 +1,1 @@
-{"error": "invalid_grant", "error_description": "Invalid refresh_token"}
+{"access_token": "Dtn804mlOZ8uyTjbW6hxnC", "expires_at": "2023-12-20T18:19:00.000", "refresh_token": "6UhpPIzfVqiKN9BZeverAJ", "refresh_token_expires_at": "2024-01-03T16:19:00.000", "client_id": "iCNM1P8VOBIkwUfhvyZAdC", "mall_id": "sofsystem", "user_id": "sofsystem", "scopes": ["mall.read_product", "mall.write_product"], "issued_at": "2023-12-20T16:19:00.000", "shop_no": "1"}

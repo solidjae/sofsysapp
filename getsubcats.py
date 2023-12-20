@@ -22,7 +22,7 @@ def get_sub_categories(cat_no):
     
     time.sleep(1)
     
-    cats = driver.find_elements(By.XPATH, "//*[@id=\"contents\"]/div[1]/div[2]/ul/li/a")
+    cats = driver.find_elements(By.XPATH, "//*[@id=\"contents\"]/div[1]/div[4]/ul/li/a")
 
     for c in cats: 
         links = c.get_attribute("href")
