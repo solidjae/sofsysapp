@@ -83,7 +83,7 @@ with st.form("Tags"):
         st.toast("Submitted")
 st.download_button(
     label="Download data as Excel",
-    data="file",
+    data="b64",
     file_name='products_data.xlsx',
 )
     

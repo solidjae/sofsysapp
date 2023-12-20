@@ -9,7 +9,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
 options = ChromeOptions()
-options.add_argument("--headless")
+options.headless = True
 
 id = "sofsystem"
 pw = "Bestsof2755!"
@@ -17,7 +17,9 @@ pw = "Bestsof2755!"
 
 def getting_auth_code():
     
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+    service = ChromeService(executable_path=ChromeDriverManager().install())
+    driver = webdriver.Chrome(options=options, service=service)
+    
     url = 'https://sofsystem.cafe24api.com/api/v2/oauth/authorize?response_type=code&client_id=iCNM1P8VOBIkwUfhvyZAdC&redirect_uri=https://www.sofsys.co.kr/&'
     url += 'scope=mall.read_product,mall.write_product&mall.read_category'
     driver.get(url)

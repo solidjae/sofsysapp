@@ -7,13 +7,15 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
 options = ChromeOptions()
-
+options.headless = True
 
 def get_sub_categories(cat_no):
     
     sub_cat_dict = {}
-    options.add_argument("--headless=new")
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+
+    service = ChromeService(executable_path=ChromeDriverManager().install())
+    driver = webdriver.Chrome(options=options, service=service)
+    
     url = "https://sofsystem.cafe24.com/product/list.html?cate_no=" + str(cat_no)
     
     driver.get(url)
