@@ -10,8 +10,8 @@ import plotly.express as px
 from datetime import datetime, timedelta
 ssl._create_default_https_context = ssl._create_unverified_context
 
-client_id = "PvUZc4rvI25p0PSUWj_J"
-client_secret = "ht4yToUsez"
+client_id = "B7jcrb_uwS43gZYo5wOi"
+client_secret = "T1b_HWlC8X"
 url  = "https://openapi.naver.com/v1/datalab/shopping/category/keywords"
 
 today = datetime.now()
@@ -33,10 +33,8 @@ def date_into_string(date):
 def split_list(input_list, chunk_size):
     return [input_list[i:i + chunk_size] for i in range(0, len(input_list), chunk_size)]
 
-def make_df_with_different_date(excel):
+def make_df_with_different_date(keyword_df):
    
-    keyword_df = keyword_getter.keyword_get(excel)
-
     last_month_df = setting_up_requests(keyword_df, date_into_string(first_day_last_month), date_into_string(last_day_last_month))
     two_months_ago_df = setting_up_requests(keyword_df, date_into_string(first_day_2_months), date_into_string(last_day_2_months))
     last_year_df = setting_up_requests(keyword_df, date_into_string(first_day_last_year), date_into_string(last_day_last_year))
@@ -102,11 +100,16 @@ def requesting(keyword, startdate, enddate, final_df):
     request.add_header("X-Naver-Client-Id",client_id)
     request.add_header("X-Naver-Client-Secret",client_secret)
     request.add_header("Content-Type","application/json")
-    response = urllib.request.urlopen(request, data=encoded_body)
-    rescode = response.read().decode("utf-8")
+    try:
+        response = urllib.request.urlopen(request, data=encoded_body)
+        rescode = response.read().decode("utf-8")
+    except urllib.error.HTTPError as e:
+        error_message = e.read().decode()
+        print(f"HTTP Error occurred: {e.code} - {error_message}")
+        raise
+
     
     json_res = json.loads(rescode)
-
     normalized = pd.json_normalize(
         json_res['results'], 
         record_path=['data'], 
@@ -120,18 +123,6 @@ def requesting(keyword, startdate, enddate, final_df):
     final_df = final_df[['keyword', 'ratio', 'period']]
     return final_df
 
-
-# def plot_chart(df, title):
-
-#     fig = px.bar(df, x="keyword", y="ratio_change", title=title)
-#     fig.show()
-    # keyword_list = list(low_df['keyword'])
-    # with open('keywords.txt', 'w') as f:
-    #     for line in keyword_list:
-    #         f.write(line)
-    #         f.write('\n')
-    # print(keyword_list)
-    # return keyword_list
 
 if __name__ == "__main__":
     make_df_with_different_date()
